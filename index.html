@@ -1,1 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raj Chauhan — Fine Art Pastry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0a0806;
+  --ink2: #13100d;
+  --ink3: #1e1a16;
+  --gold: #c9a96e;
+  --gold2: #e8d5b0;
+  --gold3: #8b6c3e;
+  --cream: #f2ece0;
+  --cream2: #e8dece;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'Jost', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
 
+/* CURSOR */
+.cursor {
+  position: fixed; z-index: 9999;
+  width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+  transition: width 0.3s, height 0.3s, background 0.3s;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  position: fixed; z-index: 9998;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(201,169,110,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+  transition: width 0.3s, height 0.3s, opacity 0.3s;
+}
+body.hovering .cursor { width: 12px; height: 12px; }
+body.hovering .cursor-ring { width: 54px; height: 54px; opacity: 0.4; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.8rem 4rem;
+  transition: background 0.6s, padding 0.4s;
+}
+nav.scrolled {
+  background: rgba(10,8,6,0.93);
+  backdrop-filter: blur(16px);
+  padding: 1.2rem 4rem;
+  border-bottom: 1px solid rgba(201,169,110,0.08);
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem; font-style: italic;
+  color: var(--gold); text-decoration: none;
+  letter-spacing: 0.06em;
+}
+.nav-links { display: flex; gap: 3rem; list-style: none; }
+.nav-links a {
+  font-size: 0.64rem; font-weight: 300;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(242,236,224,0.42); text-decoration: none;
+  transition: color 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -3px; left: 0;
+  width: 0; height: 1px; background: var(--gold);
+  transition: width 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.nav-links a:hover { color: var(--gold2); }
+.nav-links a:hover::after { width: 100%; }
+
+/* HERO */
+.hero {
+  height: 100vh; min-height: 700px;
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-img {
+  position: absolute; inset: 0;
+  background-image: url('Bakery/1.jpeg');
+  background-size: cover; background-position: center 40%;
+  opacity: 0.22;
+  filter: saturate(0.25) brightness(0.55);
+  transform: scale(1.05);
+  animation: heroZoom 20s ease-in-out infinite alternate;
+}
+@keyframes heroZoom {
+  from { transform: scale(1.05); }
+  to   { transform: scale(1.12); }
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 25%, rgba(10,8,6,0.8) 100%),
+    linear-gradient(to bottom, rgba(10,8,6,0.35) 0%, transparent 25%, transparent 55%, rgba(10,8,6,0.95) 100%),
+    radial-gradient(ellipse 70% 60% at 60% 40%, rgba(201,169,110,0.06) 0%, transparent 70%);
+}
+.particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.particle {
+  position: absolute;
+  background: var(--gold);
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat var(--dur, 8s) var(--delay, 0s) ease-in-out infinite;
+}
+@keyframes particleFloat {
+  0%   { opacity: 0; transform: translateY(80px) scale(0); }
+  20%  { opacity: 0.5; }
+  80%  { opacity: 0.2; }
+  100% { opacity: 0; transform: translateY(-180px) scale(1.5); }
+}
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center; padding: 0 2rem;
+}
+.hero-overline {
+  display: flex; align-items: center; justify-content: center; gap: 1.2rem;
+  margin-bottom: 2.4rem;
+  animation: fadeUp 1.2s ease both;
+}
+.hero-overline-line { width: 50px; height: 1px; background: var(--gold3); }
+.hero-overline-text {
+  font-size: 0.6rem; font-weight: 300;
+  letter-spacing: 0.45em; text-transform: uppercase;
+  color: var(--gold);
+}
+.hero-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(5rem, 12vw, 11rem);
+  font-weight: 400; line-height: 0.88;
+  letter-spacing: -0.02em;
+  animation: fadeUp 1.2s 0.15s ease both;
+}
+.hero-name-first { display: block; color: var(--cream); }
+.hero-name-last {
+  display: block; font-style: italic;
+  background: linear-gradient(135deg, var(--gold3) 0%, var(--gold) 40%, var(--gold2) 70%, var(--gold) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-rule {
+  display: flex; align-items: center; gap: 1.5rem;
+  margin: 2.2rem auto; max-width: 340px;
+  animation: fadeUp 1.2s 0.3s ease both;
+}
+.hero-rule-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold3), transparent); }
+.hero-rule-diamond { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
+.hero-subtitle-block { animation: fadeUp 1.2s 0.45s ease both; }
+.hero-subtitle {
+  font-size: 0.7rem; font-weight: 300;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: rgba(242,236,224,0.4); margin-bottom: 0.5rem;
+}
+.hero-tagline {
+  font-family: 'EB Garamond', serif; font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: rgba(201,169,110,0.65);
+}
+.hero-scroll {
+  position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+  animation: fadeUp 1.2s 1.2s ease both;
+}
+.hero-scroll-track { width: 1px; height: 60px; background: rgba(201,169,110,0.12); position: relative; overflow: hidden; }
+.hero-scroll-fill {
+  position: absolute; top: -100%; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--gold));
+  animation: scrollDrop 2s 1.5s ease-in-out infinite;
+}
+@keyframes scrollDrop {
+  0%   { top: -100%; opacity: 0; }
+  20%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.hero-scroll-text { font-size: 0.54rem; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(242,236,224,0.18); }
+
+/* TICKER */
+.ticker {
+  background: var(--gold3); padding: 0.8rem 0;
+  overflow: hidden; white-space: nowrap;
+  border-top: 1px solid rgba(201,169,110,0.15);
+  border-bottom: 1px solid rgba(201,169,110,0.15);
+}
+.ticker-track { display: inline-block; animation: ticker 28s linear infinite; }
+.ticker-item { display: inline-block; font-size: 0.6rem; font-weight: 300; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold2); padding: 0 2rem; }
+.ticker-sep { color: var(--gold2); opacity: 0.5; margin-right: 2rem; }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* INTRO */
+.intro {
+  padding: 9rem 4rem;
+  max-width: 880px; margin: 0 auto;
+  text-align: center;
+}
+.intro-quote {
+  font-family: 'EB Garamond', serif; font-style: italic;
+  font-size: clamp(1.45rem, 3.2vw, 2.5rem);
+  font-weight: 400; line-height: 1.55;
+  color: var(--cream2);
+  position: relative;
+}
+.intro-quote::before {
+  content: '\201C';
+  font-family: 'Playfair Display', serif;
+  font-size: 9rem; line-height: 0;
+  position: absolute; top: 1.8rem; left: -2.5rem;
+  color: rgba(201,169,110,0.07); pointer-events: none;
+}
+.intro-attr {
+  margin-top: 2.5rem;
+  display: flex; align-items: center; justify-content: center; gap: 1.2rem;
+}
+.intro-line { width: 30px; height: 1px; background: var(--gold3); }
+.intro-name { font-size: 0.6rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold); }
+
+/* CREATIONS */
+.creations { padding: 0 3rem 9rem; }
+.sec-header { text-align: center; padding: 2rem 0 4.5rem; }
+.sec-eye {
+  font-size: 0.58rem; font-weight: 300;
+  letter-spacing: 0.45em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1rem;
+  display: flex; align-items: center; justify-content: center; gap: 1rem;
+}
+.sec-eye::before,.sec-eye::after { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--gold3); }
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 400; line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+.sec-title em { font-style: italic; color: var(--gold); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+  max-width: 1400px; margin: 0 auto;
+}
+
+/* Card 1 spans 2 cols 2 rows, card 4 spans 2 cols, card 6 spans 2 cols 2 rows */
+.card:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+.card:nth-child(4) { grid-column: span 2; }
+.card:nth-child(6) { grid-column: span 2; grid-row: span 2; }
+
+.card {
+  position: relative; overflow: hidden;
+  background: var(--ink2); min-height: 280px;
+  cursor: none;
+}
+.card::before {
+  content: ''; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to bottom, transparent 35%, rgba(10,8,6,0.5) 65%, rgba(10,8,6,0.93) 100%);
+  transition: background 0.5s;
+}
+.card:hover::before {
+  background: linear-gradient(to bottom, rgba(10,8,6,0.05) 0%, rgba(10,8,6,0.72) 100%);
+}
+
+/* CAROUSEL */
+.card-carousel {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+}
+.card-carousel img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  filter: brightness(0.72) saturate(0.82);
+}
+.card-carousel img.active {
+  opacity: 1;
+}
+.card:hover .card-carousel img {
+  filter: brightness(0.88) saturate(1.08);
+}
+
+.card:nth-child(1) { min-height: 480px; }
+.card:nth-child(6) { min-height: 480px; }
+
+.card-body {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+  padding: 1.6rem 1.8rem;
+  transform: translateY(0);
+  transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.card:hover .card-body { transform: translateY(-6px); }
+.card-num { font-size: 0.54rem; font-weight: 300; letter-spacing: 0.3em; color: var(--gold); margin-bottom: 0.35rem; display: block; }
+.card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.05rem, 2vw, 1.5rem);
+  font-weight: 400; color: var(--cream); line-height: 1.2;
+}
+.card:nth-child(1) .card-name,
+.card:nth-child(6) .card-name { font-size: clamp(1.5rem, 3vw, 2.1rem); }
+.card-sub {
+  font-family: 'EB Garamond', serif; font-style: italic;
+  font-size: 0.82rem; color: rgba(242,236,224,0.42);
+  margin-top: 0.25rem;
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.4s;
+  opacity: 0;
+}
+.card:hover .card-sub { max-height: 50px; opacity: 1; }
+.card-btn {
+  position: absolute; top: 1.2rem; right: 1.2rem; z-index: 2;
+  width: 32px; height: 32px;
+  border: 1px solid rgba(201,169,110,0.25);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.7) rotate(45deg);
+  transition: opacity 0.4s, transform 0.4s;
+}
+.card-btn-inner { width: 5px; height: 5px; background: var(--gold); transform: rotate(-45deg); }
+.card:hover .card-btn { opacity: 1; transform: scale(1) rotate(0deg); }
+
+/* Carousel dots */
+.card-dots {
+  position: absolute; bottom: 1.2rem; right: 1.4rem; z-index: 3;
+  display: flex; gap: 5px; align-items: center;
+}
+.card-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(201,169,110,0.3);
+  transition: background 0.3s, transform 0.3s;
+}
+.card-dot.active {
+  background: var(--gold);
+  transform: scale(1.4);
+}
+
+/* PHILOSOPHY */
+.philosophy {
+  padding: 7rem 4rem;
+  background: var(--ink2);
+  text-align: center;
+}
+.philosophy-ornament {
+  font-family: 'Playfair Display', serif; font-size: 7rem; line-height: 1;
+  color: rgba(201,169,110,0.05); margin-bottom: -0.8rem; display: block;
+}
+.philosophy-text {
+  font-family: 'EB Garamond', serif; font-style: italic;
+  font-size: clamp(1.35rem, 2.8vw, 2.1rem);
+  font-weight: 400; line-height: 1.6;
+  color: rgba(242,236,224,0.55); max-width: 800px; margin: 0 auto;
+}
+.philosophy-text strong { color: var(--cream); font-style: normal; font-weight: 400; }
+
+/* ABOUT */
+.about {
+  position: relative; overflow: hidden;
+  padding: 9rem 4rem;
+  background: var(--ink);
+}
+.about-scanlines {
+  position: absolute; inset: 0; opacity: 0.018;
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(201,169,110,1) 2px, rgba(201,169,110,1) 3px);
+  background-size: 100% 6px;
+}
+.about-glow {
+  position: absolute; top: -20%; right: -10%;
+  width: 700px; height: 700px;
+  background: radial-gradient(ellipse, rgba(201,169,110,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.about-inner {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 5fr 7fr;
+  gap: 8rem; align-items: center;
+  max-width: 1300px; margin: 0 auto;
+}
+.about-left { position: relative; }
+.about-portrait {
+  width: 100%; aspect-ratio: 3/4;
+  background: var(--ink3);
+  border: 1px solid rgba(201,169,110,0.1);
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 0.8rem;
+  overflow: hidden;
+}
+.about-portrait img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.25) brightness(0.85); display: block; }
+.portrait-tl, .portrait-br {
+  position: absolute; width: 48px; height: 48px;
+}
+.portrait-tl { top: -8px; left: -8px; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+.portrait-br { bottom: -8px; right: -8px; border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+.about-label-side {
+  position: absolute; left: -3.8rem; top: 50%;
+  transform: rotate(-90deg) translateX(50%);
+  font-size: 0.55rem; letter-spacing: 0.35em;
+  text-transform: uppercase; color: var(--gold3);
+  white-space: nowrap;
+}
+.about-right .sec-eye { justify-content: flex-start; }
+.about-right .sec-eye::before { display: none; }
+.about-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.3rem, 4.5vw, 3.8rem);
+  font-weight: 400; line-height: 1.05;
+  letter-spacing: -0.02em; margin-bottom: 2rem; margin-top: 1rem;
+}
+.about-heading em { font-style: italic; color: var(--gold); }
+.about-rule { width: 48px; height: 1px; background: var(--gold3); margin-bottom: 2rem; }
+.about-body {
+  font-family: 'EB Garamond', serif; font-size: 1.08rem;
+  line-height: 1.9; color: rgba(242,236,224,0.52);
+  margin-bottom: 1.4rem;
+}
+.about-body strong { color: rgba(242,236,224,0.8); font-weight: 500; }
+.stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2rem; margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(201,169,110,0.1);
+}
+.stat-n {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 2.8rem; color: var(--gold);
+  line-height: 1; margin-bottom: 0.3rem; display: block;
+}
+.stat-l { font-size: 0.58rem; font-weight: 300; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(242,236,224,0.28); }
+
+/* CONTACT */
+.contact {
+  padding: 9rem 4rem 7rem;
+  text-align: center; position: relative;
+  background: var(--ink2); overflow: hidden;
+}
+.contact-glow {
+  position: absolute; bottom: -30%; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 450px;
+  background: radial-gradient(ellipse, rgba(201,169,110,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.contact-intro { font-family: 'EB Garamond', serif; font-style: italic; font-size: 1rem; color: var(--gold3); margin-bottom: 1.5rem; letter-spacing: 0.08em; }
+.contact-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 400; line-height: 0.9; margin-bottom: 3rem;
+  letter-spacing: -0.02em;
+}
+.contact-heading em { font-style: italic; color: var(--gold); }
+.contact-email {
+  display: inline-block;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.7rem);
+  font-style: italic; color: var(--cream2);
+  text-decoration: none; letter-spacing: 0.04em;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(201,169,110,0.25);
+  transition: color 0.3s, border-color 0.3s;
+}
+.contact-email:hover { color: var(--gold); border-color: var(--gold); }
+.social-row {
+  display: flex; gap: 3rem; justify-content: center;
+  margin-top: 3.5rem;
+}
+.soc {
+  font-size: 0.6rem; font-weight: 300;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(242,236,224,0.28); text-decoration: none;
+  position: relative; transition: color 0.3s;
+}
+.soc::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px; background: var(--gold);
+  transition: width 0.4s ease;
+}
+.soc:hover { color: var(--gold); }
+.soc:hover::after { width: 100%; }
+
+/* FOOTER */
+footer {
+  background: var(--ink); padding: 2.5rem 4rem;
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid rgba(201,169,110,0.07);
+}
+.footer-copy { font-size: 0.57rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(242,236,224,0.14); }
+.footer-logo { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.9rem; color: rgba(201,169,110,0.18); }
+
+/* REVEAL */
+.reveal {
+  opacity: 0; transform: translateY(34px);
+  transition: opacity 0.9s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.9s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.reveal.visible { opacity: 1; transform: none; }
+.d1 { transition-delay: 0.1s; }
+.d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; }
+.d4 { transition-delay: 0.4s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  nav, nav.scrolled { padding: 1.2rem 1.8rem; }
+  .nav-links { gap: 1.4rem; }
+  .creations { padding: 0 1.2rem 5rem; }
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .card:nth-child(1) { grid-column: span 2; }
+  .card:nth-child(4) { grid-column: span 1; }
+  .card:nth-child(6) { grid-column: span 2; }
+  .about { padding: 5rem 2rem; }
+  .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .about-left { display: none; }
+  .intro { padding: 5rem 2rem; }
+  .intro-quote::before { display: none; }
+  .contact { padding: 5rem 2rem 4rem; }
+  footer { padding: 2rem; flex-direction: column; gap: 1rem; text-align: center; }
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none; }
+}
+@media (max-width: 540px) {
+  .grid { grid-template-columns: 1fr; }
+  .card:nth-child(1),.card:nth-child(4),.card:nth-child(6) { grid-column: span 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav id="nav">
+  <a class="nav-logo" href="#">Raj Chauhan</a>
+  <ul class="nav-links">
+    <li><a href="#creations">Creations</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="particles" id="particles"></div>
+  <div class="hero-content">
+    <div class="hero-overline">
+      <div class="hero-overline-line"></div>
+      <span class="hero-overline-text">Fine Art Pastry</span>
+      <div class="hero-overline-line"></div>
+    </div>
+    <h1 class="hero-name">
+      <span class="hero-name-first">Raj</span>
+      <span class="hero-name-last">Chauhan</span>
+    </h1>
+    <div class="hero-rule">
+      <div class="hero-rule-line"></div>
+      <div class="hero-rule-diamond"></div>
+      <div class="hero-rule-line"></div>
+    </div>
+    <div class="hero-subtitle-block">
+      <p class="hero-subtitle">Pastry Chef</p>
+      <p class="hero-tagline">Traditional craft &amp; modern pastry art</p>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-track"><div class="hero-scroll-fill"></div></div>
+    <span class="hero-scroll-text">Explore</span>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Assorted Mini Sweets</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Bakery</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Chocolate Celebration</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Macarons</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Modern 3D Cake</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Plated Desserts</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Whole Cake Celebration</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Assorted Mini Sweets</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Bakery</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Chocolate Celebration</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Macarons</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Modern 3D Cake</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Plated Desserts</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Whole Cake Celebration</span><span class="ticker-sep">✦</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<section class="intro reveal">
+  <p class="intro-quote">
+    "Every creation is an expression of craft, precision, and passion — where traditional technique meets the language of modern pastry art."
+  </p>
+  <div class="intro-attr">
+    <div class="intro-line"></div>
+    <span class="intro-name">Raj Chauhan</span>
+    <div class="intro-line"></div>
+  </div>
+</section>
+
+<!-- CREATIONS -->
+<section id="creations" class="creations">
+  <div class="sec-header reveal">
+    <p class="sec-eye">Portfolio</p>
+    <h2 class="sec-title">The <em>Creations</em></h2>
+  </div>
+  <div class="grid">
+
+    <!-- 1: Assorted Mini Sweets — spans 2col 2row -->
+    <div class="card reveal" data-images='["Assorted mini sweets/1.jpeg","Assorted mini sweets/2.jpeg","Assorted mini sweets/3.jpeg","Assorted mini sweets/4.jpeg","Assorted mini sweets/5.jpeg","Assorted mini sweets/6.jpeg","Assorted mini sweets/7.jpeg","Assorted mini sweets/8.jpeg"]'>
+      <div class="card-carousel"></div>
+      <div class="card-btn"><div class="card-btn-inner"></div></div>
+      <div class="card-dots"></div>
+      <div class="card-body">
+        <span class="card-num">01</span>
+        <h3 class="card-name">Assorted Mini Sweets</h3>
+        <p class="card-sub">Delicate bites, infinite variety</p>
+      </div>
+    </div>
+
+    <!-- 2: Bakery -->
+    <div class="card reveal d1" data-images='["Bakery/1.jpeg","Bakery/2.jpeg","Bakery/3.jpeg","Bakery/4.jpeg","Bakery/5.jpeg","Bakery/6.jpeg","Bakery/7.jpeg"]'>
+      <div class="card-carousel"></div>
+      <div class="card-btn"><div class="card-btn-inner"></div></div>
+      <div class="card-dots"></div>
+      <div class="card-body">
+        <span class="card-num">02</span>
+        <h3 class="card-name">Bakery</h3>
+        <p class="card-sub">Viennoiserie &amp; artisan breads</p>
+      </div>
+    </div>
+
+    <!-- 3: Chocolate Celebration -->
+    <div class="card reveal d2" data-images='["Chocolate Celebration/1.jpeg","Chocolate Celebration/2.jpeg","Chocolate Celebration/3.jpeg","Chocolate Celebration/4.jpeg","Chocolate Celebration/5.jpeg"]'>
+      <div class="card-carousel"></div>
+      <div class="card-btn"><div class="card-btn-inner"></div></div>
+      <div class="card-dots"></div>
+      <div class="card-body">
+        <span class="card-num">03</span>
+        <h3 class="card-name">Chocolate Celebration</h3>
+        <p class="card-sub">Pure couverture, tempering art</p>
+      </div>
+    </div>
+
+    <!-- 4: Macarons — spans 2col -->
+    <div class="card reveal d1" data-images='["Macarons/1.jpeg","Macarons/2.jpeg","Macarons/3.jpeg"]'>
+      <div class="card-carousel"></div>
+      <div class="card-btn"><div class="card-btn-inner"></div></div>
+      <div class="card-dots"></div>
+      <div class="card-body">
+        <span class="card-num">04</span>
+        <h3 class="card-name">Macarons</h3>
+        <p class="card-sub">Classic French confection</p>
+      </div>
+    </div>
+
+    <!-- 5: Modern 3D Cake -->
+    <div class="card reveal d2" data-images='["Modern 3D Cake/1.jpeg","Modern 3D Cake/2.jpeg","Modern 3D Cake/3.jpeg","Modern 3D Cake/4.jpeg","Modern 3D Cake/5.jpeg"]'>
+      <div class="card-carousel"></div>
+      <div class="card-btn"><div class="card-btn-inner"></div></div>
+      <div class="card-dots"></div>
+      <div class="card-body">
+        <span class="card-num">05</span>
+        <h3 class="card-name">Modern 3D Cake</h3>
+        <p class="card-sub">Sculpture meets sugar craft</p>
+      </div>
+    </div>
+
+    <!-- 6: Plated Desserts — spans 2col 2row -->
+    <div class="card reveal" data-images='["Plated Desserts/1.jpeg","Plated Desserts/2.jpeg","Plated Desserts/3.jpeg","Plated Desserts/4.jpeg","Plated Desserts/5.jpeg","Plated Desserts/6.jpeg"]'>
+      <div class="card-carousel"></div>
+      <div class="card-btn"><div class="card-btn-inner"></div></div>
+      <div class="card-dots"></div>
+      <div class="card-body">
+        <span class="card-num">06</span>
+        <h3 class="card-name">Plated Desserts</h3>
+        <p class="card-sub">Fine dining, plate as canvas</p>
+      </div>
+    </div>
+
+    <!-- 7: Whole Cake Celebration -->
+    <div class="card reveal d1" data-images='["Whole Cake Celebration/1.jpeg","Whole Cake Celebration/2.jpeg","Whole Cake Celebration/3.jpeg","Whole Cake Celebration/4.jpeg","Whole Cake Celebration/5.jpeg","Whole Cake Celebration/6.jpeg","Whole Cake Celebration/7.jpeg"]'>
+      <div class="card-carousel"></div>
+      <div class="card-btn"><div class="card-btn-inner"></div></div>
+      <div class="card-dots"></div>
+      <div class="card-body">
+        <span class="card-num">07</span>
+        <h3 class="card-name">Whole Cake Celebration</h3>
+        <p class="card-sub">Showpiece cakes for every occasion</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy">
+  <div class="reveal">
+    <span class="philosophy-ornament">✦</span>
+    <p class="philosophy-text">
+      Pastry is not merely sugar and flour —<br>
+      it is <strong>memory, emotion, and beauty</strong><br>
+      rendered in the most ephemeral of mediums.
+    </p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about">
+  <div class="about-scanlines"></div>
+  <div class="about-glow"></div>
+  <div class="about-inner">
+    <div class="about-left reveal">
+      <span class="about-label-side">Raj Chauhan — Fine Art Pastry</span>
+      <div class="about-portrait">
+        <!-- Replace with: <img src="portrait.jpg" alt="Raj Chauhan"> -->
+        <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:5rem;color:rgba(201,169,110,0.1);">RC</div>
+        <span style="font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(242,236,224,0.12);">Your portrait here</span>
+      </div>
+      <div class="portrait-tl"></div>
+      <div class="portrait-br"></div>
+    </div>
+    <div class="about-right reveal d2">
+      <p class="sec-eye">About</p>
+      <h2 class="about-heading">A chef defined<br>by <em>craft &amp; vision</em></h2>
+      <div class="about-rule"></div>
+      <p class="about-body">
+        Welcome to the world of <strong>Raj Chauhan</strong>. Here you will find personal and professional culinary work — a seamless blend of traditional technique and contemporary modern pastry art refined across years of dedicated practice.
+      </p>
+      <p class="about-body">
+        Each creation is an expression of craft, precision, and passion. Browse the collections to explore the complete portfolio — and reach out when ready to collaborate on something extraordinary.
+      </p>
+      <div class="stats">
+        <div>
+          <span class="stat-n">10+</span>
+          <span class="stat-l">Years crafting</span>
+        </div>
+        <div>
+          <span class="stat-n">7</span>
+          <span class="stat-l">Collections</span>
+        </div>
+        <div>
+          <span class="stat-n">∞</span>
+          <span class="stat-l">Attention to detail</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="contact-glow"></div>
+  <p class="contact-intro reveal">Let's create something together</p>
+  <h2 class="contact-heading reveal d1">Get in<br><em>Touch</em></h2>
+  <a class="contact-email reveal d2" href="mailto:raj@example.com">raj@example.com</a>
+  <div class="social-row reveal d3">
+    <a class="soc" href="https://www.linkedin.com/in/raj-chauhan-822529a1/" target="_blank">LinkedIn</a>
+    <a class="soc" href="https://www.pinterest.com/Rajfineart/" target="_blank">Pinterest</a>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-copy">© 2026 Raj Chauhan — Fine Art Pastry</span>
+  <span class="footer-logo">RC</span>
+</footer>
+
+<script>
+// ── CURSOR ──────────────────────────────────────────────
+const cur = document.getElementById('cursor');
+const rng = document.getElementById('ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+});
+(function loop() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  rng.style.left = rx + 'px'; rng.style.top = ry + 'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a, .card').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+});
+
+// ── NAV SCROLL ──────────────────────────────────────────
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60));
+
+// ── PARTICLES ───────────────────────────────────────────
+const pc = document.getElementById('particles');
+for (let i = 0; i < 30; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const s = Math.random() * 2 + 0.5;
+  p.style.cssText = `left:${Math.random()*100}%;top:${50+Math.random()*50}%;width:${s}px;height:${s}px;--dur:${7+Math.random()*10}s;--delay:${Math.random()*9}s`;
+  pc.appendChild(p);
+}
+
+// ── CAROUSEL ────────────────────────────────────────────
+document.querySelectorAll('.card[data-images]').forEach(card => {
+  const images = JSON.parse(card.getAttribute('data-images'));
+  const carousel = card.querySelector('.card-carousel');
+  const dotsContainer = card.querySelector('.card-dots');
+
+  // Build img elements
+  images.forEach((src, i) => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = '';
+    img.loading = 'lazy';
+    if (i === 0) img.classList.add('active');
+    carousel.appendChild(img);
+  });
+
+  // Build dots
+  images.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'card-dot' + (i === 0 ? ' active' : '');
+    dotsContainer.appendChild(dot);
+  });
+
+  const imgs = carousel.querySelectorAll('img');
+  const dots = dotsContainer.querySelectorAll('.card-dot');
+  let current = 0;
+  let timer = null;
+  let isHovered = false;
+
+  function goTo(index) {
+    imgs[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (index + images.length) % images.length;
+    imgs[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  function startAuto() {
+    if (timer) return;
+    timer = setInterval(() => {
+      if (!isHovered) goTo(current + 1);
+    }, 2800);
+  }
+
+  function stopAuto() {
+    clearInterval(timer);
+    timer = null;
+  }
+
+  // Hover: pause on enter, resume + advance on move
+  card.addEventListener('mouseenter', () => {
+    isHovered = true;
+  });
+
+  card.addEventListener('mousemove', e => {
+    // Map horizontal mouse position within card to image index
+    const rect = card.getBoundingClientRect();
+    const relX = (e.clientX - rect.left) / rect.width;
+    const targetIndex = Math.min(Math.floor(relX * images.length), images.length - 1);
+    if (targetIndex !== current) goTo(targetIndex);
+  });
+
+  card.addEventListener('mouseleave', () => {
+    isHovered = false;
+  });
+
+  startAuto();
+});
+
+// ── SCROLL REVEAL ────────────────────────────────────────
+const obs = new IntersectionObserver(
+  es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+);
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
